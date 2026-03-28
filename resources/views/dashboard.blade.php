@@ -12,6 +12,11 @@
                     {{ __("You're logged in!") }}
                 </div>
             </div>
+            @if (session('warning'))
+            <div class="alert alert-warning">
+                {{ session('warning') }}
+            </div>
+            @endif
         </div>
     </div>
 </x-app-layout>

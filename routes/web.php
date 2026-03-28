@@ -36,4 +36,10 @@ Route::middleware(['auth'])->group(function () {
         ->name('subscription.cancel');
 });
 
+Route::middleware(['auth', 'tenant.billing.owner', 'tenant.employee.active'])->group(function () {
+    Route::get('/atendimentos', function () {
+        return  'atendimentos';
+    })->name('attendances.index');
+});
+
 require __DIR__ . '/auth.php';

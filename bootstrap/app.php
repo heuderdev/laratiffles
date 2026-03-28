@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\EnsureTenantEmployeeHasActiveTenant;
 use App\Http\Middleware\EnsureTenantOwnerHasActiveBilling;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -14,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'tenant.billing.owner' => EnsureTenantOwnerHasActiveBilling::class,
+            'tenant.employee.active' => EnsureTenantEmployeeHasActiveTenant::class,
         ]);
 
         $middleware->validateCsrfTokens(except: [
