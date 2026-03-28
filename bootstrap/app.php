@@ -11,12 +11,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->alias([
-            'tenant.set' => \App\Http\Middleware\SetCurrentTenant::class,
-            'tenant.active' => \App\Http\Middleware\EnsureTenantSubscriptionIsActive::class,
-            'default.tenant' => \App\Http\Middleware\EnsureUserHasDefaultTenant::class,
-            'verify.assinatura' => \App\Http\Middleware\EnsureTenantOwnerAndPaid::class,
-        ]);
+        $middleware->alias([]);
 
         $middleware->validateCsrfTokens(except: [
             'stripe/*',
