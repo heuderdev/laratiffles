@@ -11,6 +11,8 @@ class Tenant extends Model
 {
     use HasFactory, Billable;
 
+    public const SUBSCRIPTION_DEFAULT = 'default';
+
     protected $guarded = ['id'];
 
     protected $casts = [
@@ -61,7 +63,7 @@ class Tenant extends Model
 
     public function isSubscribed(): bool
     {
-        return $this->subscribed('default') || $this->onTrial('default');
+        return $this->subscribed(self::SUBSCRIPTION_DEFAULT);
     }
 
     public function isPaidOrFree(): bool
@@ -74,7 +76,7 @@ class Tenant extends Model
             return true;
         }
 
-        if ($this->isSubscribed()) {
+        if ($this->hasActiveBilling()) {
             return true;
         }
 
@@ -83,15 +85,15 @@ class Tenant extends Model
 
     public function onGracePeriod(): bool
     {
-        return $this->subscription('default')?->onGracePeriod() ?? false;
+        return $this->subscription(self::SUBSCRIPTION_DEFAULT)?->onGracePeriod() ?? false;
     }
 
     public function hasActiveBilling(): bool
     {
-        $subscription = $this->subscription('default');
+        $subscription = $this->subscription(self::SUBSCRIPTION_DEFAULT);
 
-        return $this->subscribed('default')
-            || $this->onTrial('default')
+        return $this->subscribed(self::SUBSCRIPTION_DEFAULT)
+            || $this->onTrial()
             || ($subscription && $subscription->onGracePeriod());
     }
 }

@@ -1,0 +1,2 @@
+Preciso criar um middleware que vai verificar se o usuário é o dono daquele tenant e verificar se está ativo/pago caso não redirecionar o awner para a rota de checkot,
+mais isso é somente para o awner.
