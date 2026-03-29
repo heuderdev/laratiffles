@@ -5,6 +5,7 @@ namespace App\Models;
 use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Laravel\Cashier\Billable;
 
 class Tenant extends Model
@@ -95,5 +96,10 @@ class Tenant extends Model
         return $this->subscribed(self::SUBSCRIPTION_DEFAULT)
             || $this->onTrial()
             || ($subscription && $subscription->onGracePeriod());
+    }
+
+    public function clients(): HasMany
+    {
+        return $this->hasMany(Client::class);
     }
 }

@@ -6,10 +6,10 @@ use App\Http\Controllers\SubscriptionController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome');
-Route::get("/demostracao", [ExemploTesteController::class, 'simalarUpload'])->name('demostracao');
+Route::middleware(['auth', 'tenant'])->get("/demostracao", [ExemploTesteController::class, 'simalarUpload'])->name('demostracao');
 
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'tenant'])->group(function () {
     Route::view('dashboard', 'dashboard')->middleware(['auth', 'verified'])->name('dashboard');
 });
 
@@ -36,7 +36,7 @@ Route::middleware(['auth'])->group(function () {
         ->name('subscription.cancel');
 });
 
-Route::middleware(['auth', 'tenant.billing.owner', 'tenant.employee.active'])->group(function () {
+Route::middleware(['auth', 'tenant', 'tenant.billing.owner', 'tenant.employee.active'])->group(function () {
     Route::get('/atendimentos', function () {
         return  'atendimentos';
     })->name('attendances.index');

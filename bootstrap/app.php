@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\EnsureTenantEmployeeHasActiveTenant;
 use App\Http\Middleware\EnsureTenantOwnerHasActiveBilling;
+use App\Http\Middleware\SetCurrentTenant;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -20,6 +21,10 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->validateCsrfTokens(except: [
             'stripe/*',
+        ]);
+
+        $middleware->alias([
+            'tenant' => SetCurrentTenant::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {})->create();

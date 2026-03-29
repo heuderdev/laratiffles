@@ -14,6 +14,9 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->singleton(Cnab240Cnab400ItauParserService::class);
         $this->app->singleton(ItauParserCnab400Service::class);
+
+        $loader = \Illuminate\Foundation\AliasLoader::getInstance();
+        $loader->alias('Debugbar', \Fruitcake\LaravelDebugbar\Facades\Debugbar::class);
     }
 
     public function boot(): void
