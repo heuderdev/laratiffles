@@ -7,7 +7,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 use Laravel\Cashier\Checkout;
 use Stripe\Stripe;
-use Stripe\Subscription as StripeSubscription;
 use Throwable;
 
 class StripeBillingService
@@ -54,7 +53,7 @@ class StripeBillingService
             \Stripe\Stripe::setApiKey($stripeSecret);
 
             if (! $tenant->stripe_id) {
-                \Log::warning('Tenant sem stripe_id para revalidação.', [
+                Log::warning('Tenant sem stripe_id para revalidação.', [
                     'tenant_id' => $tenant->id,
                 ]);
 
@@ -101,12 +100,6 @@ class StripeBillingService
                 }
 
                 $this->syncSubscriptionItems($localSubscription, $stripeSubscription);
-
-                Log::info('Sincronizando items da assinatura depois', [
-                    'subscription_id' => $localSubscription->id,
-                    'stripe_subscription_id' => $stripeSubscription->id,
-                    'items_count' => count($stripeSubscription->items->data),
-                ]);
             }
 
             $tenant->refresh();
@@ -115,7 +108,7 @@ class StripeBillingService
         } catch (\Throwable $e) {
             report($e);
 
-            \Log::error('Falha ao revalidar billing.', [
+            Log::error('Falha ao revalidar billing.', [
                 'tenant_id' => $tenant->id,
                 'error' => $e->getMessage(),
             ]);
@@ -128,11 +121,6 @@ class StripeBillingService
         \Laravel\Cashier\Subscription $localSubscription,
         \Stripe\Subscription $stripeSubscription
     ): void {
-        Log::info('Sincronizando items da assinatura antes', [
-            'subscription_id' => $localSubscription->id,
-            'stripe_subscription_id' => $stripeSubscription->id,
-            'items_count' => count($stripeSubscription->items->data),
-        ]);
         $localSubscription->items()->delete();
 
         foreach ($stripeSubscription->items->data as $item) {
