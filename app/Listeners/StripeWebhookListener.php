@@ -20,7 +20,7 @@ class StripeWebhookListener
         ]);
 
         match ($type) {
-            'checkout.session.completed'        => $this->handleCheckoutSessionCompleted($data),
+            'checkout.session.completed'       => $this->handleCheckoutSessionCompleted($data),
             'customer.subscription.created'    => $this->handleSubscriptionCreated($data),
             'customer.subscription.updated'    => $this->handleSubscriptionUpdated($data),
             'customer.subscription.deleted'    => $this->handleSubscriptionDeleted($data),
