@@ -13,7 +13,7 @@
         </thead>
         <tbody>
             @forelse($clients as $client)
-            <tr>
+            <tr wire:key="client-{{ $client->id }}">
                 <td>{{ $client->name }}</td>
                 <td>{{ $client->email }}</td>
                 <td>{{ $client->whatsapp }}</td>

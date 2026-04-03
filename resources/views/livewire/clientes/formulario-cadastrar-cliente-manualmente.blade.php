@@ -94,6 +94,26 @@
             modalInstance.hide();
         });
 
+        $wire.on('cliente-cadastrado', () => {
+            swal.fire({
+                icon: 'success',
+                title: 'Cliente cadastrado',
+                text: 'O cliente foi cadastrado com sucesso.',
+                timer: 3000,
+                showConfirmButton: false,
+            });
+        });
+
+        $wire.on('cliente-atualizado', () => {
+            swal.fire({
+                icon: 'success',
+                title: 'Cliente atualizado',
+                text: 'O cliente foi atualizado com sucesso.',
+                timer: 3000,
+                showConfirmButton: false,
+            });
+        });
+
         modalElement.addEventListener('hidden.bs.modal', () => {
             $wire.call('fecharModal');
         });

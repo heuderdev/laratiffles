@@ -4,9 +4,11 @@ namespace App\Livewire\Clientes;
 
 use App\Models\Client;
 use App\Rules\CpfOuCnpjValido;
+use Illuminate\Support\Str as SupportStr;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\On;
 use Livewire\Component;
+use Psy\Util\Str;
 
 class FormularioCadastrarClienteManualmente extends Component
 {
@@ -46,7 +48,7 @@ class FormularioCadastrarClienteManualmente extends Component
 
     private function normalizarCampos(): void
     {
-        $this->name = trim($this->name);
+        $this->name = SupportStr::upper(trim($this->name));
         $this->email = mb_strtolower(trim($this->email));
         $this->whatsapp = preg_replace('/\D+/', '', $this->whatsapp);
         $this->document = preg_replace('/\D+/', '', $this->document);
@@ -63,13 +65,13 @@ class FormularioCadastrarClienteManualmente extends Component
                 Rule::unique('clients', 'email')->ignore($this->clienteId),
             ],
             'whatsapp' => [
-                'nullable',
+                'required',
                 'string',
                 'max:20',
                 Rule::unique('clients', 'whatsapp')->ignore($this->clienteId),
             ],
             'document' => [
-                'nullable',
+                'required',
                 'string',
                 'max:20',
                 new CpfOuCnpjValido(),
@@ -93,10 +95,12 @@ class FormularioCadastrarClienteManualmente extends Component
             'email.unique' => 'Já existe um cliente cadastrado com este e-mail.',
 
             'whatsapp.string' => 'O campo WhatsApp deve ser um texto válido.',
+            'whatsapp.required' => 'O campo WhatsApp é obrigatório.',
             'whatsapp.max' => 'O campo WhatsApp deve ter no máximo :max caracteres.',
             'whatsapp.unique' => 'Já existe um cliente cadastrado com este WhatsApp.',
 
             'document.string' => 'O campo CPF/CNPJ deve ser um texto válido.',
+            'document.required' => 'O campo CPF/CNPJ é obrigatório.',
             'document.max' => 'O campo CPF/CNPJ deve ter no máximo :max caracteres.',
             'document.unique' => 'Já existe um cliente cadastrado com este CPF/CNPJ.',
 
@@ -126,18 +130,15 @@ class FormularioCadastrarClienteManualmente extends Component
         if ($this->clienteId) {
             $client = Client::findOrFail($this->clienteId);
             $client->update($validated);
-
-            session()->flash('success', 'Cliente atualizado com sucesso.');
+            $this->dispatch('cliente-atualizado');
         } else {
             Client::create([
                 ...$validated,
                 'tenant_id' => $tenantId,
             ]);
-
-            session()->flash('success', 'Cliente cadastrado com sucesso.');
+            $this->dispatch('cliente-cadastrado');
         }
 
-        $this->dispatch('cliente-cadastrado');
         $this->fecharModal();
     }
 

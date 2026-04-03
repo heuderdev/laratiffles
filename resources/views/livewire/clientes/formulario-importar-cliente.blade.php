@@ -66,8 +66,16 @@
     @script
     <script>
         const modalImportarClientesElement = document.getElementById('modalImportarClientes');
-    const modalImportarClientesInstance = new bootstrap.Modal(modalImportarClientesElement);
-
+        const modalImportarClientesInstance = new bootstrap.Modal(modalImportarClientesElement);
+    $wire.on('clientes-importados', () => {
+        swal.fire({
+            icon: 'success',
+            title: 'Importação concluída',
+            text: 'Os clientes foram importados com sucesso.',
+            timer: 3000,
+            showConfirmButton: false,
+        });
+    });
     $wire.on('abrir-modal-importacao-cliente', () => {
         modalImportarClientesInstance.show();
     });

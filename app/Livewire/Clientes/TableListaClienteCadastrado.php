@@ -13,6 +13,7 @@ class TableListaClienteCadastrado extends Component
     protected $listeners = [
         'cliente-cadastrado' => 'atualizarLista',
         'clientes-importados' => 'atualizarLista',
+        'cliente-atualizado' => 'atualizarLista',
     ];
 
     public function editarCliente(int $id): void
@@ -29,6 +30,7 @@ class TableListaClienteCadastrado extends Component
     {
         $clients = Client::query()
             ->where('tenant_id', auth()->user()->default_tenant_id)
+            ->orderByDesc('is_active')
             ->orderByDesc('id')
             ->paginate(10);
 
