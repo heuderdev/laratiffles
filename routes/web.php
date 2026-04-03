@@ -5,7 +5,7 @@ use App\Http\Controllers\ExemploTesteController;
 use App\Http\Controllers\SubscriptionController;
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'welcome');
+Route::view('/', 'welcome')->name('welcome');
 Route::middleware(['auth', 'tenant'])->get("/demostracao", [ExemploTesteController::class, 'simalarUpload'])->name('demostracao');
 
 
@@ -40,6 +40,22 @@ Route::middleware(['auth', 'tenant', 'tenant.billing.owner', 'tenant.employee.ac
     Route::get('/atendimentos', function () {
         return  'atendimentos';
     })->name('attendances.index');
+});
+
+
+Route::middleware(['auth', 'tenant'])->group(function () {
+    Route::get('/importar-clientes', [\App\Http\Controllers\Web\ImportadorClienteController::class, 'index'])->name('importar_clientes.index');
+    Route::post('/importar-clientes', [\App\Http\Controllers\Web\ImportadorClienteController::class, 'handle'])->name('importar_clientes.handle');
+    Route::post('/importar-clientes/form', [\App\Http\Controllers\Web\ImportadorClienteController::class, 'handleForm'])->name('importar_clientes.handle_form');
+});
+
+
+Route::get('/hora', function () {
+    return [
+        'servidor' => now()->format('d/m/Y H:i:s'),
+        'php' => date('d/m/Y H:i:s'),
+        'config' => config('app.timezone'),
+    ];
 });
 
 require __DIR__ . '/auth.php';
