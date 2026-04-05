@@ -49,13 +49,8 @@ Route::middleware(['auth', 'tenant'])->group(function () {
     Route::post('/importar-clientes/form', [\App\Http\Controllers\Web\ImportadorClienteController::class, 'handleForm'])->name('importar_clientes.handle_form');
 });
 
-
-Route::get('/hora', function () {
-    return [
-        'servidor' => now()->format('d/m/Y H:i:s'),
-        'php' => date('d/m/Y H:i:s'),
-        'config' => config('app.timezone'),
-    ];
+Route::middleware(['auth', 'tenant'])->group(function () {
+    Route::get('/cnab-itau', [\App\Http\Controllers\Web\CNABItau400Controller::class, 'index'])->name('cnab_itau.index');
 });
 
 require __DIR__ . '/auth.php';

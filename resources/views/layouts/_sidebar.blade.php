@@ -31,6 +31,23 @@
                     <p>Clientes</p>
                 </a>
             </li>
+
+            <li class="nav-item">
+                <a href="#" class="nav-link {{ request()->routeIs('cnab_itau.*') ? 'active' : '' }}">
+                    <i class="bi bi-bank2"></i>
+                    <p>CNAB<i class="nav-arrow bi bi-chevron-right"></i></p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="{{ route('cnab_itau.index') }}"
+                            class="nav-link {{ request()->routeIs('cnab_itau.index') ? 'active' : '' }}">
+                            <i class="bi bi-box-arrow-down-right"></i>
+                            <p>Banco Itaú</p>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
         </ul>
         <!--end::Sidebar Menu-->
     </nav>
