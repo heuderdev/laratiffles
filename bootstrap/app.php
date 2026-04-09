@@ -15,16 +15,13 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
+            'tenant' => SetCurrentTenant::class,
             'tenant.billing.owner' => EnsureTenantOwnerHasActiveBilling::class,
             'tenant.employee.active' => EnsureTenantEmployeeHasActiveTenant::class,
         ]);
 
         $middleware->validateCsrfTokens(except: [
             'stripe/*',
-        ]);
-
-        $middleware->alias([
-            'tenant' => SetCurrentTenant::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {})->create();

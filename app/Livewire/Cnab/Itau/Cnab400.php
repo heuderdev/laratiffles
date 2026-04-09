@@ -74,7 +74,11 @@ class Cnab400 extends Component
             }
 
             $banco = $detectorService->detectarBanco($conteudo);
-            $registros = $parserService->parseRegistrosCliente($conteudo);
+            //dd($banco);
+            // ITAU 400
+            if ((int)$banco["codigo"] === 341 && Str::contains($banco['formato'] ?? '', '400')) {
+                $registros = $parserService->parseRegistrosCliente($conteudo);
+            }
 
             if (empty($registros)) {
                 $this->addError('arquivoRem', 'Nenhum registro válido foi encontrado no arquivo.');

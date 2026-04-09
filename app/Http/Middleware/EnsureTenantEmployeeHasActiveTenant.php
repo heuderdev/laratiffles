@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class EnsureTenantEmployeeHasActiveTenant
 {
-    public function handle(Request $request, Closure $next): Response|null
+    public function handle(Request $request, Closure $next): Response
     {
         $user = $request->user();
 
@@ -18,9 +18,13 @@ class EnsureTenantEmployeeHasActiveTenant
         }
 
         /** @var Tenant|null $tenant */
-        $tenant = $request->route('tenant') ?? $user->defaultTenant;
+        $tenant = $user->defaultTenant;
 
-        abort_unless($tenant instanceof Tenant, 404, 'Tenant não encontrado.');
+        if (! $tenant instanceof Tenant) {
+            return redirect()
+                ->route('dashboard')
+                ->with('warning', 'Nenhum tenant padrão foi encontrado para o seu usuário.');
+        }
 
         if (! $this->isEmployeeOfTenant($user, $tenant)) {
             return $next($request);

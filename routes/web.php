@@ -49,7 +49,7 @@ Route::middleware(['auth', 'tenant'])->group(function () {
     Route::post('/importar-clientes/form', [\App\Http\Controllers\Web\ImportadorClienteController::class, 'handleForm'])->name('importar_clientes.handle_form');
 });
 
-Route::middleware(['auth', 'tenant'])->group(function () {
+Route::middleware(['auth', 'tenant', 'tenant.billing.owner', 'tenant.employee.active'])->group(function () {
     Route::get('/cnab-itau', [\App\Http\Controllers\Web\CNABItau400Controller::class, 'index'])->name('cnab_itau.index');
 });
 
